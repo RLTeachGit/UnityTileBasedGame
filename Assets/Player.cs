@@ -2,15 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public class TileOffset
+{
+    public uint oX;
+    public uint oY;
+    TileOffset(uint vOX,uint vOY)
+    {
+        oX = vOX;
+        oY = vOY;
+    }
+}
+
+
 public class Player : MonoBehaviour {
 
+    TileManager mFirstInSequence;
+
+    static  TileOffset[] = {{0,1},{0,-1},{-1,0},{1,0}};
+
+
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 		
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 		if(Input.GetMouseButtonDown(0))
         {
             Ray tRayIntoScene = Camera.main.ScreenPointToRay(Input.mousePosition);        //Make Ray from Camera into scene 
@@ -32,4 +52,10 @@ public class Player : MonoBehaviour {
             }
         }
 	}
+
+
+    uint    FindMatchingTiles(TileObject vTO)
+    {
+
+    }
 }

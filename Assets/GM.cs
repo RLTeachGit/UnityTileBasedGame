@@ -50,9 +50,8 @@ public class GM : MonoBehaviour {
     {
         if (vX < Width && vY < Height)
         {
-            return true;
+            return true;        //within array bounds
         }
-        Debug.LogFormat("{0:s} ({1:d},{2:d}) Invalid Tile location", vX, vY, System.Reflection.MethodBase.GetCurrentMethod().Name, vX, vY);
         return false;
     }
 
@@ -62,6 +61,10 @@ public class GM : MonoBehaviour {
         if (IsValidTilePosition(vX,vY))
         {
             return mTileArray[vY, vX];      //Get tile, may be null if space not filled
+        }
+        else
+        {
+            Debug.LogFormat("{0:s} ({1:d},{2:d}) Invalid Tile location", vX, vY, System.Reflection.MethodBase.GetCurrentMethod().Name, vX, vY);
         }
         return tTO;
     }
@@ -76,6 +79,10 @@ public class GM : MonoBehaviour {
                 vTO.SetXY(vX, vY);          //Make sure screen position reflects this
             }
             return true;
+        }
+        else
+        {
+            Debug.LogFormat("{0:s} ({1:d},{2:d}) Invalid Tile location", vX, vY, System.Reflection.MethodBase.GetCurrentMethod().Name, vX, vY);
         }
         return  false;      //Invalid position
     }
