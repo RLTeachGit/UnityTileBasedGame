@@ -9,8 +9,8 @@ public class TileObject : MonoBehaviour {
 
 	SpriteRenderer	mSR;        //Cached Sprite Renderer
         
-    uint	mID;
-	public	uint	ID 
+    int	mID;
+	public	int	ID 
     {		//Public Getter for TileID, dont want a setter as the tile ID should not change
 		get 
         {
@@ -18,8 +18,10 @@ public class TileObject : MonoBehaviour {
 		}
 	}
 
-	uint	mX;     //X position in tile space
-    public  uint    X   //Getter & Setter for position
+    public  bool mTagged;
+
+	int	mX;     //X position in tile space
+    public  int    X   //Getter & Setter for position
     {
         get 
         {
@@ -32,8 +34,8 @@ public class TileObject : MonoBehaviour {
         }
     }
 
-    uint    mY; //y position in tile space
-    public  uint Y //Getter & Setter for position
+    int    mY; //y position in tile space
+    public  int Y //Getter & Setter for position
     {
         get 
         {
@@ -49,7 +51,7 @@ public class TileObject : MonoBehaviour {
 
 
     //Helper function to position object in TileSpace and reflect this in screen position
-    public void    SetXY(uint vX,uint vY)     
+    public void    SetXY(int vX,int vY)     
     {
         mX = vX;
         mY = vY;
@@ -57,7 +59,7 @@ public class TileObject : MonoBehaviour {
     }
 
     //Set up a Tile Object with a sprite renderer
-    public void	Initialise(uint vID,uint vX,uint vY,Sprite vSprite) {
+    public void	Initialise(int vID,int vX,int vY,Sprite vSprite) {
 		mSR = gameObject.AddComponent<SpriteRenderer> (); //Add Sprite Renderer
         BoxCollider2D tBC=gameObject.AddComponent<BoxCollider2D>(); //Add 2D Boxcollider
         tBC.isTrigger = true;       //Turn it into a trigger

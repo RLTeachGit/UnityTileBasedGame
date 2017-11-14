@@ -25,7 +25,7 @@ public class TileManager : MonoBehaviour {
 		GM.sGM.mTM=this;		//Link TileManager to GM, for global access
 	}
 
-	public	TileObject	MakeTileObject(uint vID,uint vX, uint vY) {
+	public	TileObject	MakeTileObject(int vID,int vX, int vY) {
 		TileObject	tTO = null;
 		if (vID < mTileCount) {
 			tTO=Instantiate(TileObjectPrefab);		//Make New Tile Object
