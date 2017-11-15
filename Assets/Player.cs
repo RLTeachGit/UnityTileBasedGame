@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 public class TileOffset
@@ -35,6 +36,8 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+		if (EventSystem.current.IsPointerOverGameObject ())
+			return;
 		if(Input.GetMouseButtonDown(0))
         {
             Ray tRayIntoScene = Camera.main.ScreenPointToRay(Input.mousePosition);        //Make Ray from Camera into scene 
@@ -55,6 +58,7 @@ public class Player : MonoBehaviour {
                         Debug.LogFormat("{0:d} found", tCount);
                         if(tCount>=3)
                         {
+							GM.sGM.PlayClick ();
                             GM.sGM.RemoveTaggedTiles();
                             GM.sGM.MoveTilesDown();
                             GM.sGM.Score += 10 * tCount;
@@ -63,10 +67,6 @@ public class Player : MonoBehaviour {
                     }
                 }
             }
-        }
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            GM.sGM.NewTiles();
         }
 	}
 
@@ -95,4 +95,10 @@ public class Player : MonoBehaviour {
         }
         return  tCount;
     }
+
+	public	void	Restart()
+	{
+		GM.sGM.NewTiles();
+	}
+
 }

@@ -10,7 +10,7 @@ public class GM : MonoBehaviour {
 	TileObject[,]	mTileArray;     //Tiles stored here as an array
 
     [HideInInspector]
-	public  const int	Width=15;		//Width of game
+	public  const int	Width=7;		//Width of game
 	int	Height;					//Height of game
 
     [HideInInspector]
@@ -18,6 +18,10 @@ public class GM : MonoBehaviour {
 
 
     public int Score;
+
+
+	AudioSource	mAudio;
+
 
 	//Handy for labeling sections of code
 	#region Singleton      
@@ -29,6 +33,7 @@ public class GM : MonoBehaviour {
 			DontDestroyOnLoad(gameObject);  //Persist, now it will survive scene reloads
 			Height=(int)(((float)Width/Camera.main.aspect))+3;
 			mTileArray=new TileObject[Height,Width];
+			mAudio = GetComponent<AudioSource> ();
 		} else if (sGM != this) { //If we get called again, then destroy new version and keep old one
 			Destroy (gameObject);   //Kill any subsequent one
 		}
@@ -184,4 +189,9 @@ public class GM : MonoBehaviour {
             mScoring.SetScore(Score);     //Update Score in UI
         }
     }
+
+	public	void	PlayClick()
+	{
+		mAudio.Play ();
+	}
 }
