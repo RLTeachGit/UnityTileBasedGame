@@ -6,7 +6,10 @@ PlayerSettings:
   serializedVersion: 13
   productGUID: 4bc51b0d6d1fe4697b8a1ff419f85818
   AndroidProfiler: 0
+<<<<<<< Updated upstream
   AndroidFilterTouchesWhenObscured: 0
+=======
+>>>>>>> Stashed changes
   defaultScreenOrientation: 0
   targetDevice: 2
   useOnDemandResources: 0
@@ -145,10 +148,15 @@ PlayerSettings:
   m_ColorGamuts: 00000000
   targetPixelDensity: 0
   resolutionScalingMode: 0
+<<<<<<< Updated upstream
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     iOS: com.Modulo17.tiles
+=======
+  applicationIdentifier:
+    Android: com.modulo17.Tiles
+>>>>>>> Stashed changes
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
