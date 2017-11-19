@@ -14,11 +14,10 @@ public class TileObj : MonoBehaviour {
     public static TileObj   MakeTile(GameObject vTilePrefab, int vRow, int vColumn,int vType)
     {
         TileObj tTO=null;
-        GameObject tGO = Instantiate(vTilePrefab, new Vector3(vColumn, vRow, 0), Quaternion.identity); //Make a tile object from Prefab & position
+        GameObject tGO = Instantiate(vTilePrefab); //Make a tile object from Prefab & position
         tTO = tGO.GetComponent<TileObj>();      //Get The TileObj script to talk to
         SpriteRenderer tSR = tGO.GetComponent<SpriteRenderer>();        //Get Sprire renderer to set sprite type, base don what was requested
-        tTO.mRow = vRow;        //Set this Tile's position to mirror position in array
-        tTO.mColumn = vColumn;
+		tTO.UpdatePosition(vRow,vColumn);
         tSR.sprite = tTO.TileSprites[vType];        //Display correct Sprite
         return  tTO;
     }
@@ -29,6 +28,4 @@ public class TileObj : MonoBehaviour {
         mRow = vRow;
         transform.position = new    Vector3(mColumn, mRow, transform.position.z);       //Update Screen Position
     }
-
-
 }

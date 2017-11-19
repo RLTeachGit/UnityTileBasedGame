@@ -62,6 +62,7 @@ public class ArrayTest : MonoBehaviour {
 
     public void MoveTilesDown()
     {
+		int	tSafe = 0;
         bool tHasMoved;
         do
         {
@@ -77,9 +78,10 @@ public class ArrayTest : MonoBehaviour {
                         tHasMoved = true;
                     }
                 }
+				DownFillBlankTiles();
             }
-            DownFillBlankTiles();
-        } while (tHasMoved);
+		} while (tHasMoved && tSafe++<100);
+		Debug.LogFormat ("Lines {0:d}", tSafe);
     }
 
     void DownFillBlankTiles()     //Downfill the array by column, stop and move to next coloum when non null tile hit
@@ -88,10 +90,9 @@ public class ArrayTest : MonoBehaviour {
         {
             for (int tH = Height - 1; tH >= 0; tH--)
             {
-                TileObj tTO = mTileArray[tH, tW];     //Get tile at this position
-                if (tTO == null)
+				if ( mTileArray[tH, tW] == null)
                 {
-                    tTO = TileObj.MakeTile(TileObjPrefab, tH, tW, Random.Range(0, 7));
+					mTileArray[tH, tW] = TileObj.MakeTile(TileObjPrefab, tH, tW, Random.Range(0, 7));
                 }
                 else
                 {
