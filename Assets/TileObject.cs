@@ -75,7 +75,7 @@ public class TileObject : MonoBehaviour {
 		
 	}
 
-    //Calaculare the Screen Position from this TileSpace position
+    //Calculate the Screen Position from this TileSpace position
 	void	UpdateScreenPosition() {
 		transform.position = new Vector2 (mX, mY);
 	}

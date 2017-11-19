@@ -18,7 +18,7 @@ public class Scoring : MonoBehaviour {
     {
         if(ScoreText!=null)
         {
-            ScoreText.text = string.Format("Score:{0:d}", vScore);
+            ScoreText.text = string.Format("{0:d}", vScore);
         }
     }
 
