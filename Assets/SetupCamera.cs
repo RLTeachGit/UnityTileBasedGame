@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class SetupCamera : MonoBehaviour {
 
+	//Link to Display Array in IDE
+	public	DisplayArray	DisplayArrayRef;
 
 	// Use this for initialization
 	void Start () {
-        ArrayBasedCameraPosition(GM.Width);
+		ArrayBasedCameraPosition(DisplayArrayRef.Width);		//Based camera on Width & Height of array
     }
 
     void ArrayBasedCameraPosition(int vArrayWidth)
