@@ -20,7 +20,7 @@ public class TileManager : MonoBehaviour {
 
 
 	//Valid Offsets, from clicked tile
-	TileOffset[] mOffsetArray = { 
+	private TileOffset[] mOffsetArray = { 
 		 new TileOffset(0, 1)
 		,new TileOffset(0, -1)
 		,new TileOffset(-1, 0)
@@ -35,8 +35,8 @@ public class TileManager : MonoBehaviour {
 
 	uint 	mGemTypeCount;
 
-
-	public	TileObject[,] mTileArray=new TileObject[10,7];
+    //Keep it private and use helpers to access
+	private	TileObject[,] mTileArray=new TileObject[10,7];
 
 	#region ArrayHelpers
 	public	int Width //Get Width of array
@@ -55,29 +55,102 @@ public class TileManager : MonoBehaviour {
 		}	
 	}
 
-	public	TileObject[,] TileArray
-	{
-		get
-		{
-			return mTileArray;
-		}	
-	}
-	#endregion
+    //Check valid tile position, helper function
+    bool IsValidTilePosition(int vX, int vY)
+    {
+        if ((vX >= 0 && vX < Width) && (vY >= 0 && vY < Height))
+        {
+            return true;        //within array bounds
+        }
+        return false;
+    }
 
-	//Gte Max tilecount for this set & link to Game Manager
+    //Get tile (X,Y) from array
+    TileObject GetTile(int vX, int vY)
+    {
+        TileObject tTO = null;      //If not found return null
+        if (IsValidTilePosition(vX, vY))
+        {
+            return mTileArray[vY, vX];      //Get tile, may be null if space not filled
+        }
+        else
+        {
+            Debug.LogFormat("{0:s} ({1:d},{2:d}) Invalid Tile location", System.Reflection.MethodBase.GetCurrentMethod().Name, vX, vY);
+        }
+        return tTO;
+    }
 
-	void Start () {
+    //Set tile (X,Y) from array, pass null to clear and destroy old tile
+    bool SetTile(int vX, int vY, TileObject vNewTO)
+    {
+        if (IsValidTilePosition(vX, vY))
+        {
+            mTileArray[vY, vX] = vNewTO;      //Set New tile in array, could be null if clearing tile
+            if (vNewTO)  //If its not a null tile
+            {
+                vNewTO.SetXY(vX, vY);          //Make sure screen position reflects this
+            }
+            return true;
+        }
+        else
+        {
+            Debug.LogFormat("{0:s} ({1:d},{2:d}) Invalid Tile location", System.Reflection.MethodBase.GetCurrentMethod().Name, vX, vY);
+        }
+        return false;      //Invalid position
+    }
+
+    bool    MoveTile(TileObject vTile, int vX,int vY)
+    {
+        if (IsValidTilePosition(vX, vY) && vTile!=null)     //Valid posstion & Tile
+        {
+            SetTile(vTile.X, vTile.Y, null);        //Remove tile from old position
+            SetTile(vX, vY, vTile);                 //Put it in new position
+            return true;
+        }
+        return false;
+    }
+
+    bool ClearTile(int vX, int vY)
+    {
+        if (IsValidTilePosition(vX, vY))
+        {
+            TileObject tOldTO = mTileArray[vY, vX];     //Was something there before?
+            if (tOldTO != null)
+            {
+                mTileArray[vY, vX] = null;      //Clear tile from array
+                Destroy(tOldTO.gameObject);     //Destroy old game object
+            }
+            return true;
+        }
+        else
+        {
+            Debug.LogFormat("{0:s} ({1:d},{2:d}) Invalid Tile location", System.Reflection.MethodBase.GetCurrentMethod().Name, vX, vY);
+        }
+        return false;      //Invalid position
+    }
+
+    #endregion
+
+    //Gte Max tilecount for this set & link to Game Manager
+
+    void Start ()
+    {
 		ArrayBasedCameraPosition();
 		mGemTypeCount = (uint)GemSprites.Length;		//Number of tile sprites we can choose from
 		GM.sGM.mTM=this;		//Link TileManager to GM, for global access
 	}
 
-	TileObject	MakeTileObject(int vID,int vX, int vY) {
+	TileObject	MakeTileObject(int vID,int vX, int vY)
+    {
 		TileObject	tTO = null;
-		if (vID < mGemTypeCount) {
+		if (vID < mGemTypeCount)
+        {
 			tTO=Instantiate(TileObjectPrefab);		//Make New Tile Object
+            tTO.transform.SetParent(gameObject.transform);
 			tTO.Initialise(vID,vX,vY,GemSprites[vID]);		//Set it to desired sprite
-		} else {
+		}
+        else
+        {
 			Debug.LogFormat ("Invalid Tile ID {0:d}", vID);
 		}
 		return	tTO;
@@ -85,67 +158,21 @@ public class TileManager : MonoBehaviour {
 
 
 	//Set up new tiles for the first time
-	public  void	NewTiles() {
-		for (int tH = 0; tH < Height; tH++) {
-			for (int tW = 0; tW < Width; tW++) {
-				if (mTileArray [tH, tW] != null) {
-					Destroy (mTileArray [tH, tW].gameObject);
-					mTileArray [tH, tW] = null;
-				}
-				TileObject  tTO = MakeTileObject((int)Random.Range(0, mGemTypeCount), tW, tH);
-				SetTile(tW, tH, tTO);
+	public  void	NewTiles()
+    {
+		for (int tH = 0; tH < Height; tH++)
+        {
+			for (int tW = 0; tW < Width; tW++)
+            {
+			    ClearTile(tW,tH);        //Clear tile out
+                int tNewTileID = Mathf.FloorToInt(Random.Range(0, mGemTypeCount));      //Get new random TileIndex
+                TileObject  tNewTO = MakeTileObject(tNewTileID, tW, tH);   //Make tile
+				SetTile(tW, tH, tNewTO);        //Set New Tile
 			}
 		}
 
 	}
 
-
-	#region SafeTileHelpers
-	//Check valid tile position, helper function
-	bool IsValidTilePosition(int vX, int vY)
-	{
-		if (vX>=0 && vX < Width && vY>=0 && vY < Height)
-		{
-			return true;        //within array bounds
-		}
-		return false;
-	}
-
-	//Get tile (X,Y) from array
-	TileObject GetTile(int vX, int vY)
-	{
-		TileObject tTO = null;      //If not found return null
-		if (IsValidTilePosition(vX,vY))
-		{
-			return mTileArray[vY, vX];      //Get tile, may be null if space not filled
-		}
-		else
-		{
-			Debug.LogFormat("{0:s} ({1:d},{2:d}) Invalid Tile location", System.Reflection.MethodBase.GetCurrentMethod().Name, vX, vY);
-		}
-		return tTO;
-	}
-
-	//Set tile (X,Y) from array
-	bool SetTile(int vX, int vY,TileObject vTO)
-	{
-		if (IsValidTilePosition(vX, vY))
-		{
-			mTileArray[vY, vX]=vTO;      //Set tile in array
-			if(vTO)
-			{
-				vTO.SetXY(vX, vY);          //Make sure screen position reflects this
-			}
-			return true;
-		}
-		else
-		{
-			Debug.LogFormat("{0:s} ({1:d},{2:d}) Invalid Tile location", System.Reflection.MethodBase.GetCurrentMethod().Name, vX, vY);
-		}
-		return  false;      //Invalid position
-	}
-
-	#endregion
 
 	void    MoveTilesDown()
 	{
@@ -157,10 +184,13 @@ public class TileManager : MonoBehaviour {
 			{
 				for (int tW = 0; tW < Width; tW++)
 				{
-					if (GetTile(tW, tH - 1) == null)
+                    if (GetTile(tW, tH - 1) == null)
 					{
-						SetTile(tW, tH - 1, GetTile(tW, tH));     //Move tile down
-						SetTile(tW, tH, null);
+                        TileObject tTO = GetTile(tW, tH);
+                        if(tTO!=null)
+                        {
+                            MoveTile(tTO, tW, tH-1);
+                        }
 						tHasMoved = true;
 					}
 				}
@@ -172,9 +202,9 @@ public class TileManager : MonoBehaviour {
 
 	void ClearTaggedTiles()
 	{
-		foreach(TileObject tTO in mTileArray)	//As I am doing whole array this is faster
-		{
-			if(tTO!=null)
+		foreach(TileObject tTO in mTileArray)   //As I am doing whole array this is faster
+        {                                       //its just ckearing tagged tiles should be safe
+            if (tTO!=null)
 			{
 				tTO.mTagged = false;
 			}
@@ -186,10 +216,10 @@ public class TileManager : MonoBehaviour {
 		{
 			for (int tH = 0; tH < Height; tH++)
 			{
-				if (mTileArray[tH, tW] != null && mTileArray[tH, tW].mTagged)
+                TileObject tTO = GetTile(tW, tH);
+				if (tTO != null && tTO.mTagged)     //This is safe as if the first condition is false, the second wont be evaluated
 				{
-					Destroy(mTileArray[tH, tW].gameObject);
-					mTileArray[tH, tW] = null;
+					ClearTile(tW, tH);
 				}
 			}
 		}
