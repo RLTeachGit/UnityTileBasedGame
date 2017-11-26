@@ -29,16 +29,18 @@ public class TileManager : MonoBehaviour {
 
 
 
-	//Link to tile sprites in IDE
-	public	Sprite[]	GemSprites;
+
+    //Link to tile sprites in IDE
+    public Sprite[]	GemSprites;
 	public	TileObject	TileObjectPrefab;
 
 	uint 	mGemTypeCount;
 
-    //Keep it private and use helpers to access
-	private	TileObject[,] mTileArray=new TileObject[10,7];
+    #region TileArrayHelpers
 
-	#region ArrayHelpers
+    //Keep it private and use helpers to access
+    private TileObject[,] mTileArray=new TileObject[10,7];
+
 	public	int Width //Get Width of array
 	{
 		get 
@@ -146,7 +148,7 @@ public class TileManager : MonoBehaviour {
 		if (vID < mGemTypeCount)
         {
 			tTO=Instantiate(TileObjectPrefab);		//Make New Tile Object
-            tTO.transform.SetParent(gameObject.transform);
+            tTO.transform.SetParent(gameObject.transform); //Makes sure new wiles apear under TileManger in IDE
 			tTO.Initialise(vID,vX,vY,GemSprites[vID]);		//Set it to desired sprite
 		}
         else
@@ -180,14 +182,14 @@ public class TileManager : MonoBehaviour {
 		do
 		{
 			tHasMoved = false;
-			for (int tH = 1; tH < Height; tH++)
+			for (int tH = 1; tH < Height; tH++)     //Go through array bottom up
 			{
 				for (int tW = 0; tW < Width; tW++)
 				{
-                    if (GetTile(tW, tH - 1) == null)
+                    if (GetTile(tW, tH - 1) == null)        //If there is a space below, drop into it
 					{
                         TileObject tTO = GetTile(tW, tH);
-                        if(tTO!=null)
+                        if(tTO!=null)               //Only drop if there is somthing to drop
                         {
                             MoveTile(tTO, tW, tH-1);
                         }

@@ -20,7 +20,7 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-		if (EventSystem.current.IsPointerOverGameObject ())
+		if (EventSystem.current.IsPointerOverGameObject ())     //Ignore stuff under UI
 			return;
 		if(Input.GetMouseButtonDown(0))
         {

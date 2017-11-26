@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class TileObject : MonoBehaviour {
 
-	SpriteRenderer	mSR;        //Cached Sprite Renderer
+	private SpriteRenderer	mSR;        //Cached Sprite Renderer
         
     int	mID;
 	public	int	ID 
@@ -18,7 +18,8 @@ public class TileObject : MonoBehaviour {
 		}
 	}
 
-    public  bool mTagged;
+    [HideInInspector]
+    public  bool mTagged;      //Is Tile tagged
 
 	int	mX;     //X position in tile space
     public  int    X   //Getter & Setter for position
@@ -68,11 +69,6 @@ public class TileObject : MonoBehaviour {
 		mSR.sprite = vSprite;
         SetXY(vX, vY);
 		name = string.Format ("TileID {0:d}", mID);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 
     //Calculate the Screen Position from this TileSpace position
