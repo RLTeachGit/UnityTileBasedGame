@@ -6,7 +6,7 @@ using UnityEngine;
 //Offset Helper class
 public class TileOffset
 {
-	public int oX;
+	public int oX;      //Helper class to store a relative tile offset
 	public int oY;
 	public  TileOffset(int vOX,int vOY)
 	{
@@ -19,7 +19,7 @@ public class TileOffset
 public class TileManager : MonoBehaviour {
 
 
-	//Valid Offsets, from clicked tile
+	//Valid Offsets, from clicked tile      //These are the valid "next to" positions for a tile, ie left, right, top, bottom
 	private TileOffset[] mOffsetArray = { 
 		 new TileOffset(0, 1)
 		,new TileOffset(0, -1)
@@ -31,8 +31,8 @@ public class TileManager : MonoBehaviour {
 
 
     //Link to tile sprites in IDE
-    public Sprite[]	GemSprites;
-	public	TileObject	TileObjectPrefab;
+    public Sprite[]	GemSprites;             //Sprites we will be using for tiles
+	public	TileObject	TileObjectPrefab;   //Prefab used for a tile, we link this to a sprite at runtime
 
 	uint 	mGemTypeCount;
 
@@ -133,7 +133,7 @@ public class TileManager : MonoBehaviour {
 
     #endregion
 
-    //Gte Max tilecount for this set & link to Game Manager
+    //Get Max tilecount for this set & link to Game Manager
 
     void Start ()
     {
@@ -285,7 +285,7 @@ public class TileManager : MonoBehaviour {
 					{
 						tCheckTile.mTagged = true;
 						tCount++;
-						tCount+=FindMatchingTiles(tCheckTile);      //Now check tiles next to this one
+						tCount+=FindMatchingTiles(tCheckTile);      //Now check tiles next to this one, this routine calls itself
 					}
 				}
 			}

@@ -64,7 +64,7 @@ public class TileObject : MonoBehaviour {
 		mSR = gameObject.AddComponent<SpriteRenderer> (); //Add Sprite Renderer
         BoxCollider2D tBC=gameObject.AddComponent<BoxCollider2D>(); //Add 2D Boxcollider
         tBC.isTrigger = true;       //Turn it into a trigger
-        tBC.size = Vector2.one*0.8f;    //Add a colider just smaller than the 1x1 tile
+        tBC.size = Vector2.one*0.8f;    //Add a collider just smaller than the 1x1 tile
         mID =vID;
 		mSR.sprite = vSprite;
         SetXY(vX, vY);
